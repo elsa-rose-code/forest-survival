@@ -1,0 +1,1490 @@
+/* ============================================
+   STYLE.CSS - Game UI styling
+   ============================================ */
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  overflow: hidden;
+  font-family: 'Courier New', monospace;
+}
+
+/* ---- START SCREEN ---- */
+#blocker {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+  cursor: pointer;
+}
+
+#instructions {
+  text-align: center;
+  color: white;
+}
+
+#instructions h1 {
+  font-size: 48px;
+  margin-bottom: 20px;
+  color: #4ade80;
+  text-shadow: 0 0 20px rgba(74, 222, 128, 0.5);
+}
+
+#instructions p {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+#instructions .controls {
+  font-size: 16px;
+  color: #aaa;
+}
+
+/* ---- DEATH SCREEN ---- */
+#death-screen {
+  display: none;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(80, 0, 0, 0.6);
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  z-index: 90;
+  pointer-events: none;
+}
+
+.death-text {
+  color: #ff2222;
+  font-size: 72px;
+  font-weight: bold;
+  text-shadow: 3px 3px 6px black;
+  animation: deathPulse 0.5s ease-in-out infinite alternate;
+}
+
+.death-sub {
+  color: #ffaaaa;
+  font-size: 24px;
+  margin-top: 20px;
+}
+
+@keyframes deathPulse {
+  from { transform: scale(1); opacity: 0.8; }
+  to { transform: scale(1.05); opacity: 1; }
+}
+
+/* ---- DAMAGE FLASH ---- */
+/* Red overlay that flashes when you take damage */
+#damage-overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(255, 0, 0, 0.5);
+  opacity: 0;
+  transition: opacity 0.15s;
+  pointer-events: none;
+  z-index: 80;
+}
+
+/* ---- GAME UI ---- */
+#game-ui {
+  display: none;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 50;
+}
+
+/* Night/Day counter */
+#night-counter {
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: white;
+  font-size: 28px;
+  font-weight: bold;
+  text-shadow: 2px 2px 4px black;
+}
+
+/* Health bar */
+#health-container {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+#health-label {
+  color: #ff4444;
+  font-size: 20px;
+  font-weight: bold;
+  text-shadow: 1px 1px 2px black;
+}
+
+#health-bar-bg {
+  width: 200px;
+  height: 20px;
+  background: #333;
+  border: 2px solid #666;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+#health-bar {
+  width: 100%;
+  height: 100%;
+  background: #ff4444;
+  transition: width 0.3s;
+}
+
+/* ---- KID RESCUE COUNTER (top right) ---- */
+#kid-counter {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  color: #ffcc44;
+  font-size: 18px;
+  font-weight: bold;
+  text-shadow: 2px 2px 4px black;
+  background: rgba(0, 0, 0, 0.4);
+  padding: 6px 14px;
+  border-radius: 6px;
+  border: 1px solid rgba(255,200,68,0.3);
+}
+
+/* ---- KID CAVE PROMPT ---- */
+#kid-prompt {
+  display: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, 0px);
+  font-size: 18px;
+  font-weight: bold;
+  text-shadow: 2px 2px 4px black;
+  background: rgba(0, 0, 0, 0.6);
+  padding: 8px 20px;
+  border-radius: 8px;
+  border: 1px solid rgba(255,200,68,0.4);
+}
+
+/* ---- VICTORY SCREEN ---- */
+#victory-screen {
+  display: none;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0, 30, 0, 0.85);
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  z-index: 95;
+}
+
+.victory-text {
+  color: #4ade80;
+  font-size: 80px;
+  font-weight: bold;
+  text-shadow: 0 0 40px rgba(74,222,128,0.5), 3px 3px 6px black;
+  animation: victoryPulse 1s ease-in-out infinite alternate;
+}
+
+@keyframes victoryPulse {
+  from { transform: scale(1); text-shadow: 0 0 40px rgba(74,222,128,0.5); }
+  to { transform: scale(1.05); text-shadow: 0 0 80px rgba(74,222,128,0.8); }
+}
+
+.victory-sub {
+  color: #aaffaa;
+  font-size: 24px;
+  margin-top: 20px;
+}
+
+.victory-kids {
+  color: #ffcc44;
+  font-size: 18px;
+  margin-top: 15px;
+  letter-spacing: 2px;
+}
+
+.victory-thanks {
+  color: #888;
+  font-size: 14px;
+  margin-top: 30px;
+  font-style: italic;
+}
+
+/* ---- SAFE ZONE TEXT ---- */
+#safe-zone-text {
+  display: none;
+  position: absolute;
+  top: 55px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #4ade80;
+  font-size: 18px;
+  font-weight: bold;
+  text-shadow: 1px 1px 4px black;
+  animation: healPulse 1s ease-in-out infinite alternate;
+}
+
+@keyframes healPulse {
+  from { opacity: 0.6; }
+  to { opacity: 1; }
+}
+
+/* ---- CHEST PROMPT ---- */
+#chest-prompt {
+  display: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, 40px);
+  color: #ffdd44;
+  font-size: 20px;
+  font-weight: bold;
+  text-shadow: 2px 2px 4px black;
+  background: rgba(0, 0, 0, 0.5);
+  padding: 8px 20px;
+  border-radius: 8px;
+  border: 1px solid #ffdd44;
+  animation: promptBounce 1.5s ease-in-out infinite;
+}
+
+@keyframes promptBounce {
+  0%, 100% { transform: translate(-50%, 40px); }
+  50% { transform: translate(-50%, 35px); }
+}
+
+/* ---- PELT TRADER DIALOG ---- */
+#trader-dialog {
+  display: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -60%);
+  background: rgba(20, 12, 5, 0.95);
+  border: 2px solid #aa7744;
+  border-radius: 12px;
+  padding: 20px 28px;
+  color: #ddc49a;
+  font-size: 14px;
+  min-width: 280px;
+  text-align: center;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.7);
+  pointer-events: auto;
+  z-index: 55;
+}
+
+.trader-title {
+  font-size: 20px;
+  font-weight: bold;
+  color: #ffcc66;
+  margin-bottom: 10px;
+  text-shadow: 0 0 10px rgba(255,200,100,0.3);
+}
+
+#trader-message {
+  color: #cca;
+  font-size: 13px;
+  margin-bottom: 12px;
+  font-style: italic;
+}
+
+#trader-request {
+  color: #fff;
+  font-size: 15px;
+  margin-bottom: 14px;
+  padding: 8px;
+  background: rgba(50, 30, 10, 0.5);
+  border-radius: 6px;
+  border: 1px solid rgba(170,120,68,0.3);
+}
+
+#trader-trade-btn {
+  padding: 10px 30px;
+  font-size: 16px;
+  font-family: 'Courier New', monospace;
+  font-weight: bold;
+  background: linear-gradient(180deg, #aa7744 0%, #885522 100%);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+  pointer-events: auto;
+}
+
+#trader-trade-btn:hover {
+  background: linear-gradient(180deg, #bb8855 0%, #996633 100%);
+  box-shadow: 0 0 15px rgba(170,120,68,0.4);
+}
+
+#trader-trade-btn:disabled {
+  background: #444;
+  color: #666;
+  cursor: default;
+  box-shadow: none;
+}
+
+.trader-hint {
+  color: #665;
+  font-size: 11px;
+  margin-top: 8px;
+}
+
+/* Trader arrival announcement */
+#trader-announce {
+  display: none;
+  position: absolute;
+  top: 120px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #ffcc66;
+  font-size: 22px;
+  font-weight: bold;
+  text-shadow: 2px 2px 4px black, 0 0 15px rgba(255,200,100,0.4);
+  animation: traderFade 4s ease-out forwards;
+  pointer-events: none;
+}
+
+@keyframes traderFade {
+  0% { opacity: 0; transform: translateX(-50%) translateY(10px); }
+  15% { opacity: 1; transform: translateX(-50%) translateY(0); }
+  70% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+/* ---- FIRE UPGRADE PROMPT ---- */
+#fire-upgrade-prompt {
+  display: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, 80px);
+  color: #ff8844;
+  font-size: 20px;
+  font-weight: bold;
+  text-shadow: 2px 2px 4px black;
+  background: rgba(0, 0, 0, 0.5);
+  padding: 8px 20px;
+  border-radius: 8px;
+  border: 1px solid #ff6622;
+  animation: firePulse 1.5s ease-in-out infinite;
+}
+
+@keyframes firePulse {
+  0%, 100% { box-shadow: 0 0 10px rgba(255,100,50,0.3); }
+  50% { box-shadow: 0 0 20px rgba(255,100,50,0.6); }
+}
+
+/* ---- FIRE LEVEL UI ---- */
+#fire-level-ui {
+  display: none;
+  position: absolute;
+  top: 85px;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  background: rgba(0, 0, 0, 0.5);
+  padding: 6px 16px;
+  border-radius: 8px;
+  border: 1px solid rgba(255,100,50,0.3);
+}
+
+#fire-level {
+  color: #ff8844;
+  font-size: 16px;
+  font-weight: bold;
+  text-shadow: 0 0 8px rgba(255,100,50,0.5);
+}
+
+#fire-cost {
+  color: #aaa;
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+/* ---- HOTBAR (bottom center) ---- */
+/* Like Roblox/Minecraft - slots for your weapons and items! */
+#hotbar {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 6px;
+}
+
+.hotbar-slot {
+  width: 64px;
+  height: 64px;
+  background: rgba(0, 0, 0, 0.7);
+  border: 2px solid #555;
+  border-radius: 8px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s;
+}
+
+/* The currently selected slot glows! */
+.hotbar-slot.selected {
+  border-color: #4ade80;
+  box-shadow: 0 0 12px rgba(74, 222, 128, 0.5), inset 0 0 8px rgba(74, 222, 128, 0.15);
+  background: rgba(20, 40, 20, 0.8);
+}
+
+.hotbar-slot.empty {
+  opacity: 0.4;
+}
+
+/* Slot number in top-left corner */
+.slot-number {
+  position: absolute;
+  top: 2px;
+  left: 5px;
+  color: #888;
+  font-size: 11px;
+}
+
+.hotbar-slot.selected .slot-number {
+  color: #4ade80;
+}
+
+/* Item name at bottom */
+.slot-label {
+  position: absolute;
+  bottom: 2px;
+  color: #aaa;
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.hotbar-slot.selected .slot-label {
+  color: #4ade80;
+}
+
+.hotbar-slot.empty .slot-label {
+  color: #555;
+}
+
+/* ---- AXE ICON (drawn with CSS!) ---- */
+.slot-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  position: relative;
+}
+
+.axe-icon {
+  transform: rotate(-30deg);
+}
+
+.axe-handle {
+  width: 4px;
+  height: 24px;
+  background: #8B6914;
+  border-radius: 1px;
+  position: absolute;
+}
+
+.axe-blade {
+  width: 14px;
+  height: 12px;
+  background: #999;
+  border-radius: 2px 6px 6px 2px;
+  position: absolute;
+  top: 2px;
+  left: 12px;
+  border: 1px solid #777;
+}
+
+/* ---- SACK ICON (drawn with CSS!) ---- */
+.sack-icon {
+  position: relative;
+}
+
+.sack-body {
+  width: 20px;
+  height: 18px;
+  background: #8B6914;
+  border-radius: 3px 3px 8px 8px;
+  position: relative;
+  top: 3px;
+}
+
+.sack-tie {
+  width: 10px;
+  height: 6px;
+  background: #6b4423;
+  border-radius: 3px 3px 0 0;
+  position: absolute;
+  top: -1px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* ---- SACK POPUP (shows above hotbar when sack selected) ---- */
+#sack-popup {
+  position: absolute;
+  bottom: 95px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(30, 18, 8, 0.92);
+  border: 2px solid #6b4423;
+  border-radius: 10px;
+  padding: 12px 18px;
+  color: #ddc49a;
+  font-size: 14px;
+  min-width: 160px;
+  display: none;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+}
+
+.sack-title {
+  font-size: 16px;
+  font-weight: bold;
+  color: #f0d090;
+  text-align: center;
+  margin-bottom: 4px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid #6b4423;
+}
+
+.sack-capacity {
+  font-size: 11px;
+  color: #998866;
+  text-align: center;
+  margin-bottom: 6px;
+}
+
+.sack-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 5px 0;
+  font-size: 14px;
+}
+
+/* ---- EQUIPMENT ICONS in hotbar ---- */
+.icon-armor::after {
+  content: '';
+  display: block;
+  width: 22px; height: 24px;
+  background: #cc1144;
+  clip-path: polygon(20% 0%, 80% 0%, 100% 20%, 100% 70%, 60% 100%, 40% 100%, 0% 70%, 0% 20%);
+  margin: auto;
+}
+
+.icon-shotgun::after {
+  content: '';
+  display: block;
+  width: 28px; height: 8px;
+  background: #666;
+  border-radius: 2px;
+  margin: auto;
+  box-shadow: 8px 6px 0 #5c3a1e;
+}
+
+.icon-helmet::after {
+  content: '';
+  display: block;
+  width: 20px; height: 16px;
+  background: #ff4400;
+  border-radius: 10px 10px 2px 2px;
+  margin: auto;
+  box-shadow: 0 2px 0 #cc3300;
+}
+
+.icon-kunai::after {
+  content: '';
+  display: block;
+  width: 4px; height: 26px;
+  background: linear-gradient(180deg, #ccc 60%, #333 60%);
+  margin: auto;
+  clip-path: polygon(50% 0%, 100% 8%, 60% 60%, 60% 85%, 80% 85%, 80% 100%, 20% 100%, 20% 85%, 40% 85%, 40% 60%, 0% 8%);
+}
+
+/* ---- GOLD CHEST ITEM ICONS ---- */
+
+/* Strong Axe - bigger, golden axe */
+.icon-strongaxe::after {
+  content: '';
+  display: block;
+  width: 26px; height: 26px;
+  background: #daa520;
+  margin: auto;
+  clip-path: polygon(40% 100%, 45% 100%, 45% 40%, 30% 30%, 20% 10%, 35% 0%, 65% 0%, 80% 10%, 70% 30%, 55% 40%, 55% 100%, 60% 100%);
+}
+
+/* Infernal Sack - sack with fire glow */
+.icon-infernalsack::after {
+  content: '';
+  display: block;
+  width: 22px; height: 22px;
+  background: linear-gradient(180deg, #ff4400 0%, #ff6600 40%, #8B6914 50%);
+  margin: auto;
+  border-radius: 3px 3px 8px 8px;
+  box-shadow: 0 0 6px rgba(255,100,0,0.6), 0 -3px 8px rgba(255,60,0,0.4);
+}
+
+/* Strong Flashlight - flashlight shape */
+.icon-flashlight::after {
+  content: '';
+  display: block;
+  width: 10px; height: 24px;
+  background: linear-gradient(180deg, #ffee88 0%, #ffee88 15%, #666 15%, #555 100%);
+  margin: auto;
+  border-radius: 4px 4px 2px 2px;
+  box-shadow: 0 -3px 8px rgba(255,238,136,0.5);
+}
+
+/* Katana - long sword shape */
+.icon-katana::after {
+  content: '';
+  display: block;
+  width: 4px; height: 28px;
+  background: linear-gradient(180deg, #ddd 0%, #ccc 65%, #333 67%, #661122 100%);
+  margin: auto;
+  border-radius: 1px;
+  box-shadow: 1px 0 0 rgba(255,255,255,0.4);
+}
+
+/* ---- WOODEN CHEST ITEM ICONS ---- */
+
+/* Old Flashlight - dimmer, smaller than strong */
+.icon-flashlight-old::after {
+  content: '';
+  display: block;
+  width: 8px; height: 20px;
+  background: linear-gradient(180deg, #bbaa66 0%, #bbaa66 15%, #555544 15%, #444433 100%);
+  margin: auto;
+  border-radius: 3px 3px 2px 2px;
+}
+
+/* Giant Sack - big sack icon */
+.icon-giantsack::after {
+  content: '';
+  display: block;
+  width: 26px; height: 24px;
+  background: #8B6914;
+  margin: auto;
+  border-radius: 3px 3px 10px 10px;
+  box-shadow: 0 -2px 0 #6b4423;
+}
+
+/* Good Sack - medium sack icon */
+.icon-goodsack::after {
+  content: '';
+  display: block;
+  width: 20px; height: 20px;
+  background: #a0822a;
+  margin: auto;
+  border-radius: 3px 3px 8px 8px;
+  box-shadow: 0 -2px 0 #8B6914;
+}
+
+/* Good Axe - silver axe */
+.icon-goodaxe::after {
+  content: '';
+  display: block;
+  width: 22px; height: 22px;
+  background: #aaa;
+  margin: auto;
+  clip-path: polygon(40% 100%, 45% 100%, 45% 40%, 30% 30%, 25% 15%, 38% 0%, 62% 0%, 75% 15%, 70% 30%, 55% 40%, 55% 100%, 60% 100%);
+}
+
+/* Little colored dots for each loot type */
+.sack-icon-gem { width: 8px; height: 8px; background: #44ddff; border-radius: 2px; display: inline-block; }
+.sack-icon-meat { width: 8px; height: 8px; background: #ff6644; border-radius: 2px; display: inline-block; }
+.sack-icon-fang { width: 8px; height: 8px; background: #eee; border-radius: 2px; display: inline-block; }
+.sack-icon-bone { width: 8px; height: 8px; background: #ccbb99; border-radius: 2px; display: inline-block; }
+.sack-icon-wood { width: 8px; height: 8px; background: #8B6914; border-radius: 1px; display: inline-block; }
+.sack-icon-coal { width: 8px; height: 8px; background: #333; border-radius: 2px; display: inline-block; }
+.sack-icon-fuel { width: 8px; height: 8px; background: #cc8800; border-radius: 2px; display: inline-block; }
+.sack-icon-canister { width: 8px; height: 8px; background: #cc2222; border-radius: 1px; display: inline-block; }
+.sack-icon-scrap { width: 8px; height: 8px; background: #999; border-radius: 1px; display: inline-block; border: 1px solid #666; }
+.sack-divider { height: 1px; background: #6b4423; margin: 6px 0; opacity: 0.5; }
+.sack-icon-pelt-bunny { width: 8px; height: 8px; background: #ddccbb; border-radius: 50%; display: inline-block; }
+.sack-icon-pelt-wolf { width: 8px; height: 8px; background: #666; border-radius: 50%; display: inline-block; }
+.sack-icon-pelt-alpha { width: 8px; height: 8px; background: #222; border-radius: 50%; display: inline-block; border: 1px solid #555; }
+.sack-icon-pelt-bear { width: 8px; height: 8px; background: #4a3728; border-radius: 50%; display: inline-block; }
+
+/* ---- LOOT POPUP ---- */
+/* Floating text that shows when you pick up items */
+.loot-popup {
+  position: fixed;
+  top: 40%;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #ffdd44;
+  font-family: 'Courier New', monospace;
+  font-size: 24px;
+  font-weight: bold;
+  text-shadow: 2px 2px 4px black;
+  z-index: 60;
+  pointer-events: none;
+  animation: lootFloat 1.5s ease-out forwards;
+}
+
+@keyframes lootFloat {
+  0% { opacity: 1; transform: translateX(-50%) translateY(0); }
+  100% { opacity: 0; transform: translateX(-50%) translateY(-60px); }
+}
+
+/* ============================================
+   LOBBY STYLES - Dark forest atmosphere!
+   Inspired by 99 Nights in the Forest
+   ============================================ */
+
+#lobby {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: linear-gradient(180deg, #020408 0%, #0a1a0a 40%, #081008 70%, #040804 100%);
+  z-index: 200;
+  overflow: hidden;
+}
+
+/* --- FOG LAYERS --- */
+/* Drifting fog across the screen for atmosphere */
+.fog {
+  position: absolute;
+  top: 0; left: -100%;
+  width: 300%; height: 100%;
+  pointer-events: none;
+  opacity: 0.15;
+}
+
+.fog-1 {
+  background: radial-gradient(ellipse at 30% 50%, rgba(100,140,100,0.3) 0%, transparent 60%),
+              radial-gradient(ellipse at 70% 40%, rgba(80,120,80,0.2) 0%, transparent 50%);
+  animation: fogDrift 25s linear infinite;
+}
+
+.fog-2 {
+  background: radial-gradient(ellipse at 50% 60%, rgba(60,100,60,0.25) 0%, transparent 55%),
+              radial-gradient(ellipse at 20% 30%, rgba(80,100,80,0.15) 0%, transparent 45%);
+  animation: fogDrift 35s linear infinite reverse;
+  opacity: 0.1;
+}
+
+@keyframes fogDrift {
+  from { transform: translateX(0); }
+  to { transform: translateX(33%); }
+}
+
+/* --- FIREFLIES --- */
+/* Floating glowing dots like fireflies in a forest */
+.firefly {
+  position: absolute;
+  width: 4px; height: 4px;
+  background: #ccff66;
+  border-radius: 50%;
+  box-shadow: 0 0 8px 3px rgba(200,255,100,0.5);
+  pointer-events: none;
+  animation: fireflyFloat 6s ease-in-out infinite alternate;
+}
+
+@keyframes fireflyFloat {
+  0% { transform: translate(0, 0); opacity: 0.3; }
+  25% { opacity: 0.9; }
+  50% { transform: translate(20px, -30px); opacity: 0.4; }
+  75% { opacity: 1; }
+  100% { transform: translate(-15px, -20px); opacity: 0.2; }
+}
+
+/* --- TREE SILHOUETTES --- */
+/* Dark tree shapes at the bottom of the screen */
+.tree-line {
+  position: absolute;
+  bottom: 0; left: 0;
+  width: 100%; height: 250px;
+  pointer-events: none;
+}
+
+.tree-silhouette {
+  position: absolute;
+  bottom: 0;
+  width: 60px;
+  background: #030503;
+  clip-path: polygon(50% 0%, 15% 55%, 25% 55%, 5% 85%, 20% 85%, 0% 100%, 100% 100%, 80% 85%, 95% 85%, 75% 55%, 85% 55%);
+}
+
+/* --- LOBBY CONTENT (centered) --- */
+.lobby-content {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+/* --- TITLE --- */
+.lobby-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.title-glow {
+  font-size: 100px;
+  font-weight: bold;
+  color: #ff6633;
+  text-shadow: 0 0 40px rgba(255,100,50,0.6), 0 0 80px rgba(255,60,20,0.3);
+  line-height: 1;
+  animation: titlePulse 3s ease-in-out infinite alternate;
+}
+
+@keyframes titlePulse {
+  from { text-shadow: 0 0 40px rgba(255,100,50,0.6), 0 0 80px rgba(255,60,20,0.3); }
+  to { text-shadow: 0 0 60px rgba(255,100,50,0.8), 0 0 120px rgba(255,60,20,0.5); }
+}
+
+.lobby-title {
+  font-size: 28px;
+  color: #ddd;
+  letter-spacing: 6px;
+  text-shadow: 0 0 10px rgba(255,255,255,0.2);
+  margin: 0;
+}
+
+.title-sub {
+  font-size: 14px;
+  color: #666;
+  letter-spacing: 3px;
+  margin-top: 8px;
+  font-style: italic;
+}
+
+/* --- MATCHMAKING BOX --- */
+.lobby-box {
+  background: rgba(5, 10, 5, 0.85);
+  border: 1px solid rgba(100, 140, 80, 0.3);
+  border-radius: 12px;
+  padding: 30px 40px;
+  text-align: center;
+  min-width: 380px;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 8px 40px rgba(0,0,0,0.6), inset 0 0 30px rgba(50,80,50,0.05);
+}
+
+.lobby-section {
+  margin-bottom: 18px;
+}
+
+.lobby-section label {
+  display: block;
+  color: #7a9a6a;
+  font-size: 12px;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.lobby-section input {
+  width: 260px;
+  padding: 12px 16px;
+  font-size: 18px;
+  font-family: 'Courier New', monospace;
+  background: rgba(10,20,10,0.8);
+  color: #ddd;
+  border: 1px solid rgba(100,140,80,0.4);
+  border-radius: 8px;
+  text-align: center;
+  outline: none;
+  margin-bottom: 12px;
+  transition: all 0.2s;
+}
+
+.lobby-section input::placeholder {
+  color: #445;
+}
+
+.lobby-section input:focus {
+  border-color: #ff6633;
+  box-shadow: 0 0 15px rgba(255,100,50,0.2);
+}
+
+/* --- BUTTONS --- */
+.lobby-btn {
+  padding: 14px 32px;
+  font-size: 16px;
+  font-family: 'Courier New', monospace;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  margin: 6px;
+  transition: all 0.2s;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.btn-play {
+  background: linear-gradient(180deg, #ff6633 0%, #cc4422 100%);
+  color: white;
+  box-shadow: 0 4px 15px rgba(255,100,50,0.3);
+  font-size: 20px;
+  padding: 16px 50px;
+}
+
+.btn-play:hover {
+  background: linear-gradient(180deg, #ff7744 0%, #dd5533 100%);
+  box-shadow: 0 4px 25px rgba(255,100,50,0.5);
+  transform: translateY(-2px);
+}
+
+.btn-play:disabled {
+  background: #333;
+  color: #666;
+  cursor: default;
+  box-shadow: none;
+  transform: none;
+}
+
+.btn-join {
+  background: transparent;
+  color: #7a9a6a;
+  border: 1px solid rgba(100,140,80,0.4);
+  font-size: 14px;
+}
+
+.btn-join:hover {
+  color: #aaccaa;
+  border-color: rgba(100,140,80,0.7);
+  background: rgba(50,80,50,0.15);
+}
+
+.btn-small {
+  background: transparent;
+  color: #555;
+  border: 1px solid #333;
+  font-size: 12px;
+  padding: 8px 16px;
+}
+
+.btn-small:hover {
+  color: #999;
+  border-color: #555;
+}
+
+/* --- TEAM SIZE PICKER --- */
+.player-count-picker {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin: 18px 0;
+}
+
+.count-option {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.count-btn {
+  width: 52px;
+  height: 52px;
+  font-size: 22px;
+  font-family: 'Courier New', monospace;
+  font-weight: bold;
+  background: rgba(20,30,20,0.8);
+  color: #888;
+  border: 1px solid rgba(100,140,80,0.3);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.count-btn:hover {
+  background: rgba(255,100,50,0.15);
+  color: #ff6633;
+  border-color: #ff6633;
+  box-shadow: 0 0 15px rgba(255,100,50,0.2);
+  transform: scale(1.08);
+}
+
+.count-label {
+  font-size: 10px;
+  color: #555;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* --- WAITING ROOM --- */
+.room-code-display {
+  font-size: 13px;
+  color: #666;
+  margin-bottom: 15px;
+}
+
+.room-code-display span {
+  font-size: 30px;
+  color: #ff6633;
+  letter-spacing: 5px;
+  text-shadow: 0 0 15px rgba(255,100,50,0.4);
+}
+
+#player-list {
+  margin: 15px 0;
+}
+
+.player-entry {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 10px 14px;
+  margin: 5px 0;
+  background: rgba(30,50,30,0.3);
+  border: 1px solid rgba(100,140,80,0.15);
+  border-radius: 6px;
+}
+
+.player-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+  box-shadow: 0 0 6px currentColor;
+}
+
+.player-name {
+  color: #ccc;
+  font-size: 15px;
+  min-width: 100px;
+  text-align: left;
+}
+
+.player-status {
+  font-size: 13px;
+  min-width: 80px;
+  text-align: right;
+}
+
+#waiting-status {
+  color: #666;
+  font-size: 13px;
+  margin: 10px 0;
+}
+
+.error-text {
+  color: #ff4444;
+  font-size: 13px;
+  margin-top: 8px;
+}
+
+/* --- VERSION TEXT --- */
+.lobby-version {
+  position: absolute;
+  bottom: 15px;
+  color: #333;
+  font-size: 11px;
+  letter-spacing: 1px;
+}
+
+/* ============================================
+   MOBILE TOUCH CONTROLS
+   Only shown on phones and tablets!
+   ============================================ */
+
+#mobile-controls {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  z-index: 55;
+  pointer-events: none;
+}
+
+/* Left side - virtual joystick area */
+#joystick-zone {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  width: 140px;
+  height: 140px;
+  pointer-events: auto;
+  touch-action: none;
+}
+
+#joystick-base {
+  width: 120px;
+  height: 120px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.25);
+  border-radius: 50%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#joystick-stick {
+  width: 50px;
+  height: 50px;
+  background: rgba(255, 255, 255, 0.35);
+  border: 2px solid rgba(255, 255, 255, 0.5);
+  border-radius: 50%;
+  position: absolute;
+  transition: none;
+}
+
+/* Right side - touch area for looking around */
+#look-zone {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 50%;
+  height: 60%;
+  pointer-events: auto;
+  touch-action: none;
+}
+
+/* Attack button (big, right side) */
+#mobile-attack-btn {
+  position: absolute;
+  bottom: 30px;
+  right: 30px;
+  width: 70px;
+  height: 70px;
+  background: rgba(255, 68, 68, 0.5);
+  border: 2px solid rgba(255, 68, 68, 0.7);
+  border-radius: 50%;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  font-family: 'Courier New', monospace;
+  pointer-events: auto;
+  touch-action: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+#mobile-attack-btn:active {
+  background: rgba(255, 68, 68, 0.8);
+  transform: scale(0.92);
+}
+
+/* Action button (E) */
+#mobile-action-btn {
+  position: absolute;
+  bottom: 110px;
+  right: 35px;
+  width: 52px;
+  height: 52px;
+  background: rgba(255, 221, 68, 0.4);
+  border: 2px solid rgba(255, 221, 68, 0.6);
+  border-radius: 50%;
+  color: white;
+  font-size: 18px;
+  font-weight: bold;
+  font-family: 'Courier New', monospace;
+  pointer-events: auto;
+  touch-action: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+#mobile-action-btn:active {
+  background: rgba(255, 221, 68, 0.7);
+  transform: scale(0.92);
+}
+
+/* Fire upgrade button (F) */
+#mobile-fire-btn {
+  position: absolute;
+  bottom: 110px;
+  right: 95px;
+  width: 44px;
+  height: 44px;
+  background: rgba(255, 136, 68, 0.4);
+  border: 2px solid rgba(255, 136, 68, 0.6);
+  border-radius: 50%;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  font-family: 'Courier New', monospace;
+  pointer-events: auto;
+  touch-action: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+#mobile-fire-btn:active {
+  background: rgba(255, 136, 68, 0.7);
+  transform: scale(0.92);
+}
+
+/* Trade button (T) */
+#mobile-trade-btn {
+  position: absolute;
+  bottom: 160px;
+  right: 40px;
+  width: 44px;
+  height: 44px;
+  background: rgba(170, 119, 68, 0.4);
+  border: 2px solid rgba(170, 119, 68, 0.6);
+  border-radius: 50%;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  font-family: 'Courier New', monospace;
+  pointer-events: auto;
+  touch-action: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+#mobile-trade-btn:active {
+  background: rgba(170, 119, 68, 0.7);
+  transform: scale(0.92);
+}
+
+#mobile-craft-btn {
+  position: absolute;
+  bottom: 210px;
+  right: 40px;
+  width: 44px;
+  height: 44px;
+  background: rgba(139, 105, 20, 0.4);
+  border: 2px solid rgba(139, 105, 20, 0.6);
+  border-radius: 50%;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  font-family: 'Courier New', monospace;
+  pointer-events: auto;
+  touch-action: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+#mobile-craft-btn:active {
+  background: rgba(139, 105, 20, 0.7);
+  transform: scale(0.92);
+}
+
+/* Mobile hotbar slot buttons */
+#mobile-hotbar-btns {
+  position: absolute;
+  bottom: 90px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 6px;
+  pointer-events: auto;
+}
+
+.mobile-slot-btn {
+  width: 36px;
+  height: 36px;
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid #555;
+  border-radius: 6px;
+  color: #aaa;
+  font-size: 14px;
+  font-weight: bold;
+  font-family: 'Courier New', monospace;
+  pointer-events: auto;
+  touch-action: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.mobile-slot-btn:active {
+  background: rgba(74, 222, 128, 0.3);
+  border-color: #4ade80;
+}
+
+/* ---- CRAFTING TABLE ---- */
+#crafting-prompt {
+  display: none;
+  position: fixed;
+  bottom: 160px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #ffaa44;
+  font-size: 16px;
+  font-weight: bold;
+  font-family: 'Courier New', monospace;
+  text-shadow: 1px 1px 4px black;
+  background: rgba(0, 0, 0, 0.5);
+  padding: 8px 16px;
+  border: 1px solid #ffaa44;
+  border-radius: 6px;
+  z-index: 50;
+  animation: firePulse 1.5s ease-in-out infinite;
+}
+
+#crafting-menu {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  background: rgba(10, 8, 4, 0.92);
+  border: 2px solid #8B6914;
+  border-radius: 12px;
+  padding: 24px 32px;
+  z-index: 80;
+  min-width: 280px;
+  box-shadow: 0 0 30px rgba(139, 105, 20, 0.3);
+}
+
+.crafting-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 5px;
+}
+
+.crafting-title {
+  color: #ffaa44;
+  font-size: 22px;
+  font-weight: bold;
+  font-family: 'Courier New', monospace;
+  text-shadow: 0 0 10px rgba(255, 170, 68, 0.4);
+}
+
+.grinder-level {
+  color: #999;
+  font-size: 13px;
+  font-family: 'Courier New', monospace;
+  background: rgba(255, 255, 255, 0.08);
+  padding: 3px 8px;
+  border-radius: 4px;
+}
+
+.crafting-beds {
+  color: #4ade80;
+  font-size: 16px;
+  font-weight: bold;
+  font-family: 'Courier New', monospace;
+  text-shadow: 0 0 8px rgba(74, 222, 128, 0.3);
+}
+
+.crafting-recipes {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+}
+
+.craft-btn {
+  background: rgba(107, 68, 35, 0.6);
+  color: #ffdd88;
+  border: 1px solid #6b4423;
+  border-radius: 6px;
+  padding: 10px 14px;
+  font-size: 14px;
+  font-family: 'Courier New', monospace;
+  cursor: pointer;
+  transition: all 0.15s;
+  text-align: left;
+}
+
+.craft-btn:hover:not(:disabled) {
+  background: rgba(139, 105, 20, 0.5);
+  border-color: #ffaa44;
+  box-shadow: 0 0 10px rgba(255, 170, 68, 0.2);
+}
+
+.craft-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.recipe-locked {
+  color: #666;
+}
+
+.craft-upgrade {
+  background: rgba(80, 80, 80, 0.5);
+  border-color: #666;
+  color: #aaa;
+}
+
+.craft-upgrade:hover:not(:disabled) {
+  border-color: #aaa;
+  color: #fff;
+}
+
+.craft-close {
+  background: rgba(100, 30, 30, 0.4);
+  border-color: #844;
+  color: #ff8888;
+  text-align: center;
+  margin-top: 5px;
+}
+
+.craft-close:hover {
+  background: rgba(150, 40, 40, 0.5);
+}
+
+.crafting-divider {
+  height: 1px;
+  background: #6b4423;
+  width: 100%;
+  opacity: 0.4;
+}
+
+/* ---- SUNDIAL HUD ---- */
+#sundial-hud {
+  position: fixed;
+  top: 45px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #ffcc44;
+  font-size: 13px;
+  font-family: 'Courier New', monospace;
+  text-shadow: 1px 1px 3px black;
+  background: rgba(0, 0, 0, 0.4);
+  padding: 3px 10px;
+  border-radius: 4px;
+  z-index: 40;
+}
+
+/* ---- MAP COMPASS ---- */
+#map-compass {
+  position: fixed;
+  top: 80px;
+  right: 20px;
+  text-align: center;
+  z-index: 40;
+}
+
+.compass-arrow {
+  color: #ff4444;
+  font-size: 28px;
+  text-shadow: 0 0 6px rgba(255, 68, 68, 0.5);
+  transition: transform 0.15s;
+}
+
+.compass-label {
+  color: #aaa;
+  font-size: 10px;
+  font-family: 'Courier New', monospace;
+}
+
+.compass-dist {
+  color: #888;
+  font-size: 11px;
+  font-family: 'Courier New', monospace;
+}

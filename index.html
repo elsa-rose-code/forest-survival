@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>99 Nights in the Forest</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ======== LOBBY SCREEN ======== -->
+  <div id="lobby">
+    <!-- Animated fog layers -->
+    <div class="fog fog-1"></div>
+    <div class="fog fog-2"></div>
+
+    <!-- Floating fireflies -->
+    <div class="firefly" style="left:10%;top:20%;animation-delay:0s"></div>
+    <div class="firefly" style="left:80%;top:30%;animation-delay:1.2s"></div>
+    <div class="firefly" style="left:25%;top:70%;animation-delay:0.5s"></div>
+    <div class="firefly" style="left:65%;top:15%;animation-delay:2s"></div>
+    <div class="firefly" style="left:45%;top:80%;animation-delay:0.8s"></div>
+    <div class="firefly" style="left:90%;top:60%;animation-delay:1.5s"></div>
+    <div class="firefly" style="left:15%;top:50%;animation-delay:2.5s"></div>
+    <div class="firefly" style="left:70%;top:75%;animation-delay:0.3s"></div>
+
+    <!-- Silhouette trees at the bottom -->
+    <div class="tree-line">
+      <div class="tree-silhouette" style="left:2%;height:180px"></div>
+      <div class="tree-silhouette" style="left:10%;height:220px"></div>
+      <div class="tree-silhouette" style="left:18%;height:160px"></div>
+      <div class="tree-silhouette" style="left:28%;height:200px"></div>
+      <div class="tree-silhouette" style="left:38%;height:170px"></div>
+      <div class="tree-silhouette" style="left:48%;height:210px"></div>
+      <div class="tree-silhouette" style="left:58%;height:190px"></div>
+      <div class="tree-silhouette" style="left:68%;height:230px"></div>
+      <div class="tree-silhouette" style="left:78%;height:175px"></div>
+      <div class="tree-silhouette" style="left:88%;height:205px"></div>
+      <div class="tree-silhouette" style="left:95%;height:185px"></div>
+    </div>
+
+    <!-- Main lobby content -->
+    <div class="lobby-content">
+      <!-- Title -->
+      <div class="lobby-header">
+        <div class="title-glow">99</div>
+        <h1 class="lobby-title">NIGHTS IN THE FOREST</h1>
+        <div class="title-sub">Can you survive?</div>
+      </div>
+
+      <!-- Matchmaking box -->
+      <div class="lobby-box">
+        <!-- Step 1: Enter your name -->
+        <div id="lobby-name" class="lobby-section">
+          <label>Your Name</label>
+          <input type="text" id="name-input" placeholder="Enter your name..." maxlength="12">
+        </div>
+
+        <!-- Step 2: Create or Join -->
+        <div id="lobby-choice" class="lobby-section">
+          <button id="btn-create" class="lobby-btn btn-play">Play</button>
+          <button id="btn-join" class="lobby-btn btn-join">Join Friend</button>
+        </div>
+
+        <!-- Create Room: pick team size -->
+        <div id="lobby-create" class="lobby-section" style="display:none">
+          <label>Choose your team</label>
+          <div class="player-count-picker">
+            <div class="count-option">
+              <button class="count-btn" data-count="1">1</button>
+              <span class="count-label">Solo</span>
+            </div>
+            <div class="count-option">
+              <button class="count-btn" data-count="2">2</button>
+              <span class="count-label">Duo</span>
+            </div>
+            <div class="count-option">
+              <button class="count-btn" data-count="3">3</button>
+              <span class="count-label">Trio</span>
+            </div>
+            <div class="count-option">
+              <button class="count-btn" data-count="4">4</button>
+              <span class="count-label">Squad</span>
+            </div>
+            <div class="count-option">
+              <button class="count-btn" data-count="5">5</button>
+              <span class="count-label">Full</span>
+            </div>
+          </div>
+          <button id="btn-back-create" class="lobby-btn btn-small">Back</button>
+        </div>
+
+        <!-- Join Room: enter code -->
+        <div id="lobby-join" class="lobby-section" style="display:none">
+          <label>Enter Room Code</label>
+          <input type="text" id="code-input" placeholder="ABC123" maxlength="6">
+          <button id="btn-submit-code" class="lobby-btn btn-join">Join</button>
+          <button id="btn-back-join" class="lobby-btn btn-small">Back</button>
+          <div id="join-error" class="error-text"></div>
+        </div>
+
+        <!-- Waiting Room -->
+        <div id="lobby-waiting" class="lobby-section" style="display:none">
+          <div class="room-code-display">Room Code: <span id="room-code">------</span></div>
+          <div id="player-list"></div>
+          <div id="waiting-status">Waiting for players...</div>
+          <button id="btn-ready" class="lobby-btn btn-play">Ready!</button>
+        </div>
+      </div>
+
+      <!-- Version text at bottom -->
+      <div class="lobby-version">v1.0 - Made by Ava</div>
+    </div>
+  </div>
+
+  <!-- ======== GAME SCREENS (hidden until game starts) ======== -->
+
+  <!-- MOBILE TOUCH CONTROLS (only visible on phones/tablets) -->
+  <div id="mobile-controls" style="display:none">
+    <!-- Left side: virtual joystick for movement -->
+    <div id="joystick-zone">
+      <div id="joystick-base">
+        <div id="joystick-stick"></div>
+      </div>
+    </div>
+    <!-- Right side: touch area for looking around -->
+    <div id="look-zone"></div>
+    <!-- Attack button -->
+    <button id="mobile-attack-btn">ATK</button>
+    <!-- Action button (E key - open chests, rescue kids) -->
+    <button id="mobile-action-btn">E</button>
+    <!-- Fire upgrade button (F key) -->
+    <button id="mobile-fire-btn">F</button>
+    <!-- Trade button (T key) -->
+    <button id="mobile-trade-btn">T</button>
+    <!-- Craft button (C key) -->
+    <button id="mobile-craft-btn">C</button>
+    <!-- Hotbar buttons for mobile -->
+    <div id="mobile-hotbar-btns">
+      <button class="mobile-slot-btn" data-slot="1">1</button>
+      <button class="mobile-slot-btn" data-slot="2">2</button>
+      <button class="mobile-slot-btn" data-slot="3">3</button>
+      <button class="mobile-slot-btn" data-slot="4">4</button>
+      <button class="mobile-slot-btn" data-slot="5">5</button>
+    </div>
+  </div>
+
+  <!-- Death screen -->
+  <div id="death-screen">
+    <div class="death-text">YOU DIED</div>
+    <div class="death-sub">Respawning...</div>
+  </div>
+
+  <!-- Victory screen (all 4 kids rescued!) -->
+  <div id="victory-screen">
+    <div class="victory-text">YOU WIN!</div>
+    <div class="victory-sub">All 4 missing kids have been rescued!</div>
+    <div class="victory-kids">Dino Kid - Kraken Kid - Squid Kid - Koala Kid</div>
+    <div class="victory-thanks">Thank you for playing 99 Nights in the Forest!</div>
+  </div>
+
+  <!-- Damage flash -->
+  <div id="damage-overlay"></div>
+
+  <!-- Game UI -->
+  <div id="game-ui">
+    <div id="night-counter">Day 1</div>
+    <div id="health-container">
+      <div id="health-label">HP</div>
+      <div id="health-bar-bg">
+        <div id="health-bar"></div>
+      </div>
+    </div>
+    <!-- Safe zone healing text -->
+    <div id="safe-zone-text">Safe Zone - Healing...</div>
+
+    <!-- Kid rescue counter (top right) -->
+    <div id="kid-counter">Kids: 0/4</div>
+
+    <!-- Kid cave prompt -->
+    <div id="kid-prompt"></div>
+
+    <!-- Chest open prompt -->
+    <div id="chest-prompt">Press E to open chest</div>
+
+    <!-- Trader dialog (shows when near trader) -->
+    <div id="trader-dialog">
+      <div class="trader-title">Pelt Trader</div>
+      <div id="trader-message"></div>
+      <div id="trader-request"></div>
+      <button id="trader-trade-btn" onclick="tradeWithTrader()">Trade!</button>
+      <div class="trader-hint">Press T to trade</div>
+    </div>
+
+    <!-- Trader arrival announcement -->
+    <div id="trader-announce"></div>
+
+    <!-- Fire upgrade prompt (shows when near campfire) -->
+    <div id="fire-upgrade-prompt">Press F to upgrade fire</div>
+
+    <!-- Fire level display -->
+    <div id="fire-level-ui">
+      <div id="fire-level">Fire Lv.1</div>
+      <div id="fire-cost"></div>
+    </div>
+
+    <!-- HOTBAR - weapon and item slots at the bottom -->
+    <div id="hotbar">
+      <div class="hotbar-slot selected" data-slot="1" id="slot-1">
+        <div class="slot-number">1</div>
+        <div class="slot-icon axe-icon">
+          <div class="axe-handle"></div>
+          <div class="axe-blade"></div>
+        </div>
+        <div class="slot-label">Old Axe</div>
+      </div>
+      <div class="hotbar-slot" data-slot="2" id="slot-2">
+        <div class="slot-number">2</div>
+        <div class="slot-icon sack-icon">
+          <div class="sack-body"></div>
+          <div class="sack-tie"></div>
+        </div>
+        <div class="slot-label">Sack</div>
+      </div>
+      <div class="hotbar-slot empty" data-slot="3" id="slot-3">
+        <div class="slot-number">3</div>
+        <div class="slot-label">Empty</div>
+      </div>
+      <div class="hotbar-slot empty" data-slot="4" id="slot-4">
+        <div class="slot-number">4</div>
+        <div class="slot-label">Empty</div>
+      </div>
+      <div class="hotbar-slot empty" data-slot="5" id="slot-5">
+        <div class="slot-number">5</div>
+        <div class="slot-label">Empty</div>
+      </div>
+    </div>
+
+    <!-- SACK POPUP - shows loot when sack is selected -->
+    <div id="sack-popup">
+      <div class="sack-title">Old Sack</div>
+      <div class="sack-capacity">Storage: <span id="sack-used">0</span> / <span id="sack-max">5</span></div>
+      <div class="sack-items">
+        <div class="sack-row"><span class="sack-icon-gem"></span> Gems: <span id="gem-count">0</span></div>
+        <div class="sack-row"><span class="sack-icon-meat"></span> Meat: <span id="meat-count">0</span></div>
+        <div class="sack-row"><span class="sack-icon-fang"></span> Fangs: <span id="fang-count">0</span></div>
+        <div class="sack-row"><span class="sack-icon-bone"></span> Bones: <span id="bone-count">0</span></div>
+        <div class="sack-row"><span class="sack-icon-wood"></span> Wood: <span id="wood-count">0</span></div>
+        <div class="sack-row"><span class="sack-icon-coal"></span> Coal: <span id="coal-count">0</span></div>
+        <div class="sack-row"><span class="sack-icon-fuel"></span> Fuel: <span id="fuel-count">0</span></div>
+        <div class="sack-row"><span class="sack-icon-canister"></span> Fuel Canisters: <span id="canister-count">0</span></div>
+        <div class="sack-row"><span class="sack-icon-scrap"></span> Scrap: <span id="scrap-count">0</span></div>
+        <div class="sack-divider"></div>
+        <div class="sack-row"><span class="sack-icon-pelt-bunny"></span> Bunny Feet: <span id="bunnyfoot-count">0</span></div>
+        <div class="sack-row"><span class="sack-icon-pelt-wolf"></span> Wolf Pelts: <span id="wolfpelt-count">0</span></div>
+        <div class="sack-row"><span class="sack-icon-pelt-alpha"></span> Alpha Pelts: <span id="alphapelt-count">0</span></div>
+        <div class="sack-row"><span class="sack-icon-pelt-bear"></span> Bear Pelts: <span id="bearpelt-count">0</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Crafting Table prompt -->
+  <div id="crafting-prompt">Press C to craft</div>
+
+  <!-- Crafting Menu -->
+  <div id="crafting-menu">
+    <div class="crafting-header">
+      <div class="crafting-title">Crafting Table</div>
+      <div id="grinder-level" class="grinder-level">Grinder Lv.1</div>
+    </div>
+    <div class="crafting-beds">Beds: <span id="bed-count">0 / 4</span></div>
+    <div class="crafting-recipes">
+      <button id="craft-bed" class="craft-btn" onclick="craftItem('bed')">Bed - 4 wood + 2 bones</button>
+      <button id="craft-sundial" class="craft-btn" onclick="craftItem('sundial')">Sundial - 3 scrap + 2 wood</button>
+      <button id="craft-map" class="craft-btn craft-locked" onclick="craftItem('map')">Map (Grinder Lv.2)</button>
+    </div>
+    <div class="crafting-divider"></div>
+    <button id="craft-upgrade-grinder" class="craft-btn craft-upgrade" onclick="upgradeGrinder()">Upgrade Grinder</button>
+    <button class="craft-btn craft-close" onclick="toggleCraftingMenu()">Close (C)</button>
+  </div>
+
+  <!-- Sundial HUD (hidden until crafted) -->
+  <div id="sundial-hud" style="display:none">Day 0%</div>
+
+  <!-- Map Compass (hidden until crafted) -->
+  <div id="map-compass" style="display:none">
+    <div class="compass-arrow">&#9650;</div>
+    <div class="compass-label">Camp</div>
+    <div class="compass-dist">0m</div>
+  </div>
+
+  <!-- Load libraries -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
+
+  <!-- Load our game files -->
+  <script src="world.js"></script>
+  <script src="player.js"></script>
+  <script src="enemies.js"></script>
+  <script src="chests.js"></script>
+  <script src="kids.js"></script>
+  <script src="crafting.js"></script>
+  <script src="multiplayer.js"></script>
+  <script src="atmosphere.js"></script>
+  <script src="social.js"></script>
+  <script src="pets.js"></script>
+  <script src="collecting.js"></script>
+  <script src="customization.js"></script>
+  <script src="narrative.js"></script>
+  <script src="endgame.js"></script>
+  <script src="game.js"></script>
+</body>
+</html>
