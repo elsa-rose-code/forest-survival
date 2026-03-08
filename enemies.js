@@ -528,11 +528,7 @@ function spawnEnemiesForNewZone(level) {
       const pos = randomPositionInZone(30, 55);
       spawnEnemy(scene, 'bunny', pos.x, pos.z);
     }
-    // Deer start appearing
-    for (let i = 0; i < 2; i++) {
-      const pos = randomPositionInZone(30, 60);
-      spawnEnemy(scene, 'deer', pos.x, pos.z);
-    }
+    // Deer only come out at night! (spawned in spawnNightEnemies)
   } else if (level === 3) {
     // Zone 3 unlocked! Bears, more alpha wolves
     for (let i = 0; i < 3; i++) {
@@ -560,10 +556,7 @@ function spawnEnemiesForNewZone(level) {
       const pos = randomPositionInZone(100, 140);
       spawnEnemy(scene, 'alphaWolf', pos.x, pos.z);
     }
-    for (let i = 0; i < 2; i++) {
-      const pos = randomPositionInZone(80, 130);
-      spawnEnemy(scene, 'deer', pos.x, pos.z);
-    }
+    // Deer only come out at night! (spawned in spawnNightEnemies)
   } else if (level === 5) {
     // Full map! The toughest enemies at the very edge
     for (let i = 0; i < 4; i++) {
@@ -608,10 +601,14 @@ function spawnNightEnemies(scene) {
     spawnEnemy(scene, 'bear', pos.x, pos.z);
   }
 
-  // Extra deer roaming around (if zone 2+ unlocked)
-  if (dayNightState.nightCount >= 2 && mapR > 40) {
-    const pos = randomPositionInZone(30, Math.min(120, mapR - 2));
-    spawnEnemy(scene, 'deer', pos.x, pos.z);
+  // Deer only come out at night! Creepy bipedal deer roaming the darkness
+  if (mapR > 40) {
+    const deerCount = 2 + Math.floor(dayNightState.nightCount / 3);
+    for (let i = 0; i < Math.min(deerCount, 6); i++) {
+      const pos = randomPositionInZone(25, Math.min(120, mapR - 2));
+      const deer = spawnEnemy(scene, 'deer', pos.x, pos.z);
+      if (deer) deer.nightOnly = true; // Mark for despawn at dawn
+    }
   }
 }
 
@@ -623,6 +620,20 @@ function randomPositionInZone(minDist, maxDist) {
     x: Math.cos(angle) * dist,
     z: Math.sin(angle) * dist
   };
+}
+
+// Despawn night-only enemies (deer) when dawn arrives
+function despawnNightOnlyEnemies() {
+  for (let i = enemies.length - 1; i >= 0; i--) {
+    const enemy = enemies[i];
+    if (enemy.nightOnly && enemy.health > 0) {
+      // Fade away into the fog
+      if (enemy.mesh && enemy.mesh.parent) {
+        enemy.mesh.parent.remove(enemy.mesh);
+      }
+      enemies.splice(i, 1);
+    }
+  }
 }
 
 // ============================================

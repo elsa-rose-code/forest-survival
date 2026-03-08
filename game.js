@@ -127,6 +127,11 @@ function gameLoop() {
     spawnNightEnemies(scene);
   }
 
+  // Despawn night-only enemies (deer) at dawn
+  if (dayNightState.justBecameDay) {
+    despawnNightOnlyEnemies();
+  }
+
   // Pelt trader (checks if they should arrive/leave, shows dialog)
   updateTrader();
 
