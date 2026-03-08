@@ -20,6 +20,20 @@ const mpState = {
 // All the button clicks and screen switching
 // ============================================
 
+// Helper: add both touch and click support for buttons (fixes iPad 300ms delay)
+function onTap(element, callback) {
+  let touched = false;
+  element.addEventListener('touchstart', (e) => {
+    touched = true;
+    e.preventDefault();
+    callback(e);
+  }, { passive: false });
+  element.addEventListener('click', (e) => {
+    if (!touched) callback(e); // Only fire click if no touch happened
+    touched = false;
+  });
+}
+
 function setupLobby() {
   const lobby = document.getElementById('lobby');
   const lobbyChoice = document.getElementById('lobby-choice');
@@ -29,7 +43,7 @@ function setupLobby() {
   const nameInput = document.getElementById('name-input');
 
   // --- CREATE ROOM BUTTON ---
-  document.getElementById('btn-create').addEventListener('click', () => {
+  onTap(document.getElementById('btn-create'), () => {
     if (!nameInput.value.trim()) {
       nameInput.style.border = '2px solid #ff4444';
       nameInput.placeholder = 'Type your name first!';
@@ -41,7 +55,7 @@ function setupLobby() {
   });
 
   // --- JOIN ROOM BUTTON ---
-  document.getElementById('btn-join').addEventListener('click', () => {
+  onTap(document.getElementById('btn-join'), () => {
     if (!nameInput.value.trim()) {
       nameInput.style.border = '2px solid #ff4444';
       nameInput.placeholder = 'Type your name first!';
@@ -53,18 +67,18 @@ function setupLobby() {
   });
 
   // --- BACK BUTTONS ---
-  document.getElementById('btn-back-create').addEventListener('click', () => {
+  onTap(document.getElementById('btn-back-create'), () => {
     lobbyCreate.style.display = 'none';
     lobbyChoice.style.display = 'block';
   });
-  document.getElementById('btn-back-join').addEventListener('click', () => {
+  onTap(document.getElementById('btn-back-join'), () => {
     lobbyJoin.style.display = 'none';
     lobbyChoice.style.display = 'block';
   });
 
   // --- PLAYER COUNT BUTTONS (1-5) ---
   document.querySelectorAll('.count-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
+    onTap(btn, () => {
       const count = parseInt(btn.dataset.count);
       socket.emit('createRoom', {
         name: mpState.playerName,
@@ -74,7 +88,7 @@ function setupLobby() {
   });
 
   // --- SUBMIT JOIN CODE ---
-  document.getElementById('btn-submit-code').addEventListener('click', submitJoinCode);
+  onTap(document.getElementById('btn-submit-code'), submitJoinCode);
   document.getElementById('code-input').addEventListener('keyup', (e) => {
     if (e.key === 'Enter') submitJoinCode();
   });
@@ -90,7 +104,7 @@ function setupLobby() {
   }
 
   // --- READY BUTTON ---
-  document.getElementById('btn-ready').addEventListener('click', () => {
+  onTap(document.getElementById('btn-ready'), () => {
     socket.emit('playerReady');
     document.getElementById('btn-ready').textContent = 'Waiting...';
     document.getElementById('btn-ready').disabled = true;

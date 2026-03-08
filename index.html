@@ -2,7 +2,9 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <title>99 Nights in the Forest</title>
   <link rel="stylesheet" href="style.css">
 </head>
@@ -188,7 +190,7 @@
       <div class="trader-title">Pelt Trader</div>
       <div id="trader-message"></div>
       <div id="trader-request"></div>
-      <button id="trader-trade-btn" onclick="tradeWithTrader()">Trade!</button>
+      <button id="trader-trade-btn" ontouchstart="event.preventDefault(); tradeWithTrader();" onclick="tradeWithTrader()">Trade!</button>
       <div class="trader-hint">Press T to trade</div>
     </div>
 
@@ -270,13 +272,13 @@
     </div>
     <div class="crafting-beds">Beds: <span id="bed-count">0 / 4</span></div>
     <div class="crafting-recipes">
-      <button id="craft-bed" class="craft-btn" onclick="craftItem('bed')">Bed - 4 wood + 2 bones</button>
-      <button id="craft-sundial" class="craft-btn" onclick="craftItem('sundial')">Sundial - 3 scrap + 2 wood</button>
-      <button id="craft-map" class="craft-btn craft-locked" onclick="craftItem('map')">Map (Grinder Lv.2)</button>
+      <button id="craft-bed" class="craft-btn" ontouchstart="event.preventDefault(); craftItem('bed');" onclick="craftItem('bed')">Bed - 4 wood + 2 bones</button>
+      <button id="craft-sundial" class="craft-btn" ontouchstart="event.preventDefault(); craftItem('sundial');" onclick="craftItem('sundial')">Sundial - 3 scrap + 2 wood</button>
+      <button id="craft-map" class="craft-btn craft-locked" ontouchstart="event.preventDefault(); craftItem('map');" onclick="craftItem('map')">Map (Grinder Lv.2)</button>
     </div>
     <div class="crafting-divider"></div>
-    <button id="craft-upgrade-grinder" class="craft-btn craft-upgrade" onclick="upgradeGrinder()">Upgrade Grinder</button>
-    <button class="craft-btn craft-close" onclick="toggleCraftingMenu()">Close (C)</button>
+    <button id="craft-upgrade-grinder" class="craft-btn craft-upgrade" ontouchstart="event.preventDefault(); upgradeGrinder();" onclick="upgradeGrinder()">Upgrade Grinder</button>
+    <button class="craft-btn craft-close" ontouchstart="event.preventDefault(); toggleCraftingMenu();" onclick="toggleCraftingMenu()">Close (C)</button>
   </div>
 
   <!-- Sundial HUD (hidden until crafted) -->
