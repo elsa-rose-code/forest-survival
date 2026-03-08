@@ -247,15 +247,8 @@ function checkTreeChop(lookDir) {
     const dot = lookDir.dot(toTree);
     if (dot < 0.3) continue;
 
-    // HIT A TREE! Get wood!
-    if (!sackHasRoom(1)) {
-      showLootText('Sack is full!');
-      return;
-    }
-
-    playerState.inventory.wood += 1;
-    updateInventoryUI();
-    showLootText('+1 wood');
+    // HIT A TREE! Drop wood on the ground!
+    spawnWoodDrop(tree.position.clone());
 
     // Remove the tree from the scene (it's been chopped down!)
     if (tree.parent) tree.parent.remove(tree);
@@ -1292,5 +1285,72 @@ function useInfernalSack() {
 function updateInfernalSackCooldown(delta) {
   if (infernalSackCooldown > 0) {
     infernalSackCooldown -= delta;
+  }
+}
+
+// ============================================
+// WOOD DROPS - Physical wood on the ground!
+// Chop a tree -> wood drops -> walk over to pick up
+// ============================================
+
+const droppedWood = [];
+const WOOD_PICKUP_RANGE = 2.5;
+
+function spawnWoodDrop(position) {
+  const wood = new THREE.Group();
+
+  // Log shape (brown cylinder lying on its side)
+  const logMat = new THREE.MeshLambertMaterial({ color: 0x8B5A2B });
+  const log = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.12, 0.7, 6), logMat);
+  log.rotation.z = Math.PI / 2; // Lay on side
+  log.position.y = 0.12;
+  wood.add(log);
+
+  // Second smaller log crossed on top
+  const log2 = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.08, 0.5, 6), logMat);
+  log2.rotation.x = Math.PI / 2;
+  log2.position.y = 0.25;
+  wood.add(log2);
+
+  // Gentle glow so you can spot it
+  const glow = new THREE.PointLight(0x88cc44, 0.4, 5);
+  glow.position.y = 0.5;
+  wood.add(glow);
+
+  wood.position.set(position.x, 0, position.z);
+  scene.add(wood);
+
+  droppedWood.push({
+    mesh: wood,
+    glow: glow,
+    position: wood.position
+  });
+
+  showLootText('Wood dropped!');
+}
+
+// Called every frame from the game loop
+function updateWoodDrops(playerPos) {
+  for (let i = droppedWood.length - 1; i >= 0; i--) {
+    const w = droppedWood[i];
+
+    // Pulse the glow
+    if (w.glow) {
+      w.glow.intensity = 0.3 + Math.sin(totalTime * 3 + i * 0.7) * 0.2;
+    }
+
+    // Auto-pickup if player is close and holding sack
+    const dist = playerPos.distanceTo(w.position);
+    if (dist < WOOD_PICKUP_RANGE && playerState.selectedSlot === 2) {
+      if (sackHasRoom(1)) {
+        playerState.inventory.wood += 1;
+        updateInventoryUI();
+        showLootText('+1 wood!');
+
+        // Remove from scene
+        scene.remove(w.mesh);
+        droppedWood.splice(i, 1);
+      }
+    }
   }
 }

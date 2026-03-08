@@ -163,6 +163,9 @@ function gameLoop() {
   // Pelt drops on the ground (glow + auto-pickup)
   updatePeltDrops(playerState.position);
 
+  // Wood drops on the ground (glow + auto-pickup)
+  updateWoodDrops(playerState.position);
+
   // Crafting table (prompt + sundial + compass updates)
   updateCraftingPrompt(playerState.position);
   updateSundialHUD();
