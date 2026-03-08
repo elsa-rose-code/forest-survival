@@ -308,6 +308,7 @@ function setupKeyboardControls() {
       case 'KeyT': tradeWithTrader(); break;  // T = trade with trader!
       case 'KeyC': toggleCraftingMenu(); break; // C = open crafting table!
       case 'KeyG': checkPetFeed(); break; // G = feed nearby animal to tame!
+      case 'KeyX': toggleDropMenu(); break; // X = drop items from sack!
     }
   });
 
@@ -586,6 +587,15 @@ function setupMobileControls() {
     craftBtn.addEventListener('touchstart', (e) => {
       e.preventDefault();
       toggleCraftingMenu();
+    }, { passive: false });
+  }
+
+  // Drop button (X)
+  const dropBtn = document.getElementById('mobile-drop-btn');
+  if (dropBtn) {
+    dropBtn.addEventListener('touchstart', (e) => {
+      e.preventDefault();
+      toggleDropMenu();
     }, { passive: false });
   }
 
@@ -1350,6 +1360,143 @@ function updateWoodDrops(playerPos) {
         // Remove from scene
         scene.remove(w.mesh);
         droppedWood.splice(i, 1);
+      }
+    }
+  }
+}
+
+// ============================================
+// DROP ITEMS FROM SACK
+// Press X to open drop menu, tap item to drop 1
+// ============================================
+
+// All droppable item types with display info and mesh colors
+const DROP_ITEM_INFO = {
+  gems:          { label: 'Gems',           color: 0x44ffaa, glowColor: 0x44ffaa },
+  meat:          { label: 'Meat',           color: 0xcc4444, glowColor: 0xff6666 },
+  fangs:         { label: 'Fangs',          color: 0xeeeeee, glowColor: 0xcccccc },
+  bones:         { label: 'Bones',          color: 0xddddcc, glowColor: 0xccccbb },
+  wood:          { label: 'Wood',           color: 0x8B5A2B, glowColor: 0x88cc44 },
+  coal:          { label: 'Coal',           color: 0x222222, glowColor: 0xff6600 },
+  fuel:          { label: 'Fuel',           color: 0xddaa22, glowColor: 0xffcc00 },
+  fuelCanister:  { label: 'Fuel Canister',  color: 0xcc2222, glowColor: 0xff4444 },
+  scrap:         { label: 'Scrap',          color: 0x888888, glowColor: 0xaaaaaa },
+  bunnyFoot:     { label: 'Bunny Foot',     color: 0xddccbb, glowColor: 0xddccbb },
+  wolfPelt:      { label: 'Wolf Pelt',      color: 0x666666, glowColor: 0x888888 },
+  alphaWolfPelt: { label: 'Alpha Pelt',     color: 0x222222, glowColor: 0x886644 },
+  bearPelt:      { label: 'Bear Pelt',      color: 0x4a3728, glowColor: 0x664422 }
+};
+
+const droppedItems = []; // Physical items dropped from sack
+const DROPPED_ITEM_RANGE = 2.5;
+let dropMenuOpen = false;
+
+function toggleDropMenu() {
+  const menu = document.getElementById('drop-menu');
+  if (!menu) return;
+
+  dropMenuOpen = !dropMenuOpen;
+
+  if (dropMenuOpen) {
+    // Build the menu with items you actually have
+    let html = '<div class="drop-title">Drop Item (X to close)</div>';
+    const inv = playerState.inventory;
+    let hasItems = false;
+
+    for (const key in DROP_ITEM_INFO) {
+      if (inv[key] && inv[key] > 0) {
+        hasItems = true;
+        const info = DROP_ITEM_INFO[key];
+        html += '<button class="drop-btn" ontouchstart="event.preventDefault(); dropFromSack(\'' + key + '\');" onclick="dropFromSack(\'' + key + '\')">' +
+                info.label + ' (' + inv[key] + ')</button>';
+      }
+    }
+
+    if (!hasItems) {
+      html += '<div class="drop-empty">Sack is empty!</div>';
+    }
+
+    menu.innerHTML = html;
+    menu.style.display = 'block';
+  } else {
+    menu.style.display = 'none';
+  }
+}
+
+function dropFromSack(itemKey) {
+  const inv = playerState.inventory;
+  if (!inv[itemKey] || inv[itemKey] <= 0) return;
+
+  // Remove from inventory
+  inv[itemKey] -= 1;
+  updateInventoryUI();
+
+  // Spawn physical item in front of the player
+  const dropPos = playerState.position.clone();
+  const forward = new THREE.Vector3(0, 0, -1);
+  forward.applyAxisAngle(new THREE.Vector3(0, 1, 0), playerState.yaw);
+  dropPos.add(forward.multiplyScalar(2));
+
+  spawnDroppedItem(itemKey, dropPos);
+  showLootText('Dropped 1 ' + DROP_ITEM_INFO[itemKey].label);
+
+  // Refresh the menu
+  if (dropMenuOpen) {
+    toggleDropMenu(); // close
+    toggleDropMenu(); // reopen with updated counts
+  }
+}
+
+function spawnDroppedItem(itemKey, position) {
+  const info = DROP_ITEM_INFO[itemKey];
+  if (!info) return;
+
+  const group = new THREE.Group();
+
+  // Small box representing the item
+  const mat = new THREE.MeshLambertMaterial({ color: info.color });
+  const mesh = new THREE.Mesh(new THREE.BoxGeometry(0.3, 0.3, 0.3), mat);
+  mesh.position.y = 0.2;
+  mesh.rotation.y = Math.random() * Math.PI * 2;
+  group.add(mesh);
+
+  // Glow
+  const glow = new THREE.PointLight(info.glowColor, 0.5, 5);
+  glow.position.y = 0.5;
+  group.add(glow);
+
+  group.position.set(position.x, 0, position.z);
+  scene.add(group);
+
+  droppedItems.push({
+    mesh: group,
+    glow: glow,
+    itemKey: itemKey,
+    position: group.position
+  });
+}
+
+// Called every frame from the game loop
+function updateDroppedItems(playerPos) {
+  for (let i = droppedItems.length - 1; i >= 0; i--) {
+    const item = droppedItems[i];
+
+    // Pulse glow + gentle bob
+    if (item.glow) {
+      item.glow.intensity = 0.3 + Math.sin(totalTime * 3 + i * 1.1) * 0.2;
+    }
+    item.mesh.children[0].rotation.y += 0.02; // Slow spin
+
+    // Auto-pickup if player is close and holding sack
+    const dist = playerPos.distanceTo(item.position);
+    if (dist < DROPPED_ITEM_RANGE && playerState.selectedSlot === 2) {
+      if (sackHasRoom(1)) {
+        playerState.inventory[item.itemKey] += 1;
+        updateInventoryUI();
+        showLootText('+1 ' + DROP_ITEM_INFO[item.itemKey].label + '!');
+
+        scene.remove(item.mesh);
+        droppedItems.splice(i, 1);
       }
     }
   }
